@@ -15,7 +15,7 @@ namespace HelloWorld
 
         public void TekenConsole(ConsoleTekener t)
         {
-            for (int i = 0; i < hoogte; i++)
+            for (int i = 0; i < hoogte + 10; i++)
             {
                 Console.WriteLine("");
             }
