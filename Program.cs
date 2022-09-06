@@ -29,10 +29,10 @@
             while (menu)
             {
                 Console.Clear();
-                Console.WriteLine("Kies een optie:");
                 Console.WriteLine("1) Inloggen");
                 Console.WriteLine("2) Registreren");
-                Console.WriteLine("3) Exit");
+                Console.WriteLine("3) Verifieren");
+                Console.WriteLine("0) Exit");
                 Console.Write("\r\nKies een optie: ");
 
                 switch (Console.ReadLine())
@@ -44,9 +44,14 @@
                         Registreer();
                         break;
                     case "3":
+                        Verifieren();
+                        break;
+                    case "0":
                         menu = false;
                         break;
                 }
+                Console.Write("\r\nDruk op enter om terug te keren: ");
+                Console.ReadLine();
             }
         }
 
@@ -59,31 +64,46 @@
             bool ingelogd = GebruikersService.Login(Email, Wachtwoord);
             if (ingelogd)
             {
-                Console.WriteLine("succesvol ingelogd");
-
+                Console.WriteLine("\r\nsuccesvol ingelogd\r\n");
+                return;
             }
-            Console.WriteLine("inloggen mislukt");
+            Console.WriteLine("\r\ninloggen mislukt\r\n");
+            return;
         }
 
         static void Registreer()
         {
-            Console.WriteLine("Naam:");
+            Console.WriteLine("\r\nNaam:");
             string Naam = Console.ReadLine();
-            Console.WriteLine("Email:");
+            Console.WriteLine("\r\nEmail:");
             string Email = Console.ReadLine();
-            Console.WriteLine("Wachtwoord:");
+            Console.WriteLine("\r\nWachtwoord:");
             string Wachtwoord = Console.ReadLine();
 
             Gebruiker gebruiker = GebruikersService.Registreer(Naam, Email, Wachtwoord);
             if (gebruiker != null)
             {
-                Console.WriteLine("aangemeld, druk enter om terug te keren");
-                Console.ReadLine();
+                Console.WriteLine("\r\nsuccesvol aangemeld!\r\n");
                 return;
             }
-            Console.WriteLine("Registreren mislukt, druk enter om terug te keren");
-            Console.ReadLine();
+            Console.WriteLine("\r\nRegistreren mislukt.\r\n");
             return;
+        }
+
+        static void Verifieren()
+        {
+            Console.WriteLine("\r\nEmail:");
+            string Email = Console.ReadLine();
+            Console.WriteLine("\r\nToken:");
+            string Token = Console.ReadLine();
+
+            if (GebruikersService.Verifieer(Email, Token))
+            {
+                Console.WriteLine("\r\nVerificatie voltooid\r\n.");
+                return;
+            }
+            Console.WriteLine("\r\nVerificatie mislukt.\r\n");
+
         }
     }
 }
