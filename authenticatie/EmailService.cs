@@ -1,8 +1,8 @@
 namespace HelloWorld
 {
-    class EmailService
+    class EmailService : IEmailService
     {
-        public static void Email(string text, string naarAdres)
+        public void Email(string text, string naarAdres)
         {
             Console.WriteLine("Aan: " + naarAdres);
             Console.WriteLine();

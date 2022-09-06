@@ -2,16 +2,24 @@ namespace HelloWorld
 {
     class GebruikersService
     {
-        public static Gebruiker Registreer(string naam, string email, string wachtwoord)
+        public IEmailService emailService;
+        public IGebruikersContext gebruikersContext;
+        public GebruikersService(IEmailService Imail, IGebruikersContext Igebruiker)
         {
-            VerificatieToken verificatieToken = new VerificatieToken();
-            EmailService.Email("Welkom, uw verificatiecode is: " + verificatieToken.Token, email);
-            return GebruikersContext.NieuweGebruiker(naam, email, wachtwoord, verificatieToken);
+            this.emailService = Imail;
+            this.gebruikersContext = Igebruiker;
         }
 
-        public static bool Login(string email, string wachtwoord)
+        public Gebruiker Registreer(string naam, string email, string wachtwoord)
         {
-            Gebruiker? gebruiker = GebruikersContext.GetGebruikerMetEmail(email);
+            Gebruiker gebruiker = gebruikersContext.NieuweGebruiker(naam, email, wachtwoord);
+            emailService.Email("Welkom, uw verificatiecode is: " + gebruiker.verificatieToken.Token, email);
+            return gebruiker;
+        }
+
+        public bool Login(string email, string wachtwoord)
+        {
+            Gebruiker? gebruiker = gebruikersContext.GetGebruikerMetEmail(email);
             if (gebruiker == null)
             {
                 return false;
@@ -29,9 +37,9 @@ namespace HelloWorld
             return true;
         }
 
-        public static Boolean Verifieer(string email, string token)
+        public Boolean Verifieer(string email, string token)
         {
-            Gebruiker? gebruiker = GebruikersContext.GetGebruikerMetEmail(email);
+            Gebruiker? gebruiker = gebruikersContext.GetGebruikerMetEmail(email);
 
             if (gebruiker == null || gebruiker.verificatieToken == null)
             {

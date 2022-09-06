@@ -4,15 +4,14 @@ namespace HelloWorld
     {
         public string Token { get; set; }
         public DateTime VerloopDatum { get; set; }
-        private static Random random = new Random();
 
-        public VerificatieToken()
+        public VerificatieToken(string Token, DateTime VerloopDatum)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            string randomString = new string(Enumerable.Repeat(chars, 15)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            this.Token = Token;
 
-            this.Token = randomString;
+            TimeSpan time = new TimeSpan(3, 0, 0, 0);
+            DateTime combined = VerloopDatum.Add(time);
+            this.VerloopDatum = combined;
         }
     }
 }

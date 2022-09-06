@@ -23,8 +23,13 @@
             menu();
         }
 
+
         static void menu()
         {
+            IEmailService emailService = new EmailService();
+            IGebruikersContext gebruikersContext = new GebruikersContext();
+            GebruikersService gebruikersService = new GebruikersService(emailService, gebruikersContext);
+
             bool menu = true;
             while (menu)
             {
@@ -38,13 +43,13 @@
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        Login();
+                        Login(gebruikersService);
                         break;
                     case "2":
-                        Registreer();
+                        Registreer(gebruikersService);
                         break;
                     case "3":
-                        Verifieren();
+                        Verifieren(gebruikersService);
                         break;
                     case "0":
                         menu = false;
@@ -55,13 +60,13 @@
             }
         }
 
-        static void Login()
+        static void Login(GebruikersService gebruikersService)
         {
             Console.WriteLine("Email:");
             string Email = Console.ReadLine();
             Console.WriteLine("Wachtwoord:");
             string Wachtwoord = Console.ReadLine();
-            bool ingelogd = GebruikersService.Login(Email, Wachtwoord);
+            bool ingelogd = gebruikersService.Login(Email, Wachtwoord);
             if (ingelogd)
             {
                 Console.WriteLine("\r\nsuccesvol ingelogd\r\n");
@@ -71,7 +76,7 @@
             return;
         }
 
-        static void Registreer()
+        static void Registreer(GebruikersService gebruikersService)
         {
             Console.WriteLine("\r\nNaam:");
             string Naam = Console.ReadLine();
@@ -80,7 +85,7 @@
             Console.WriteLine("\r\nWachtwoord:");
             string Wachtwoord = Console.ReadLine();
 
-            Gebruiker gebruiker = GebruikersService.Registreer(Naam, Email, Wachtwoord);
+            Gebruiker gebruiker = gebruikersService.Registreer(Naam, Email, Wachtwoord);
             if (gebruiker != null)
             {
                 Console.WriteLine("\r\nsuccesvol aangemeld!\r\n");
@@ -90,14 +95,14 @@
             return;
         }
 
-        static void Verifieren()
+        static void Verifieren(GebruikersService gebruikersService)
         {
             Console.WriteLine("\r\nEmail:");
             string Email = Console.ReadLine();
             Console.WriteLine("\r\nToken:");
             string Token = Console.ReadLine();
 
-            if (GebruikersService.Verifieer(Email, Token))
+            if (gebruikersService.Verifieer(Email, Token))
             {
                 Console.WriteLine("\r\nVerificatie voltooid\r\n.");
                 return;
